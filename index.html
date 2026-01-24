@@ -1,12 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Page Title</title>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inspirational Quote</title>
 
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --fg: #f2f2f2;
+      --muted: #bdbdbd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .container {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .quote {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      line-height: 1.4;
+      margin-bottom: 1rem;
+    }
+
+    .author {
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    button {
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--fg);
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
 <body>
-  <h1>Hello There</h1>
+  <div class="container">
+    <div id="quote" class="quote"></div>
+    <div id="author" class="author"></div>
+    <button onclick="newQuote()">New quote</button>
+  </div>
+
+  <script>
+  let quotes = [];
+
+  async function loadQuotes() {
+    try {
+      const response = await fetch("quotes.json");
+      quotes = await response.json();
+      newQuote();
+    } catch (err) {
+      console.error("Failed to load quotes:", err);
+    }
+  }
+
+  function newQuote() {
+    if (quotes.length === 0) return;
+
+    const q = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById("quote").textContent = q.text;
+    document.getElementById("author").textContent = q.author;
+  }
+
+  loadQuotes();
+</script>
 </body>
 </html>
